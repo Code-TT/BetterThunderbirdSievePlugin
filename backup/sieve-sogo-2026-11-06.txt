@@ -1,0 +1,64 @@
+require ["fileinto"];
+if allof (address :contains "from" "aliexpress.com") {
+    fileinto "AliExpress";
+}
+if allof (address :contains "from" "dhgate.com") {
+    fileinto "DHgate";
+}
+if anyof (address :contains "from" "facebook.com", address :contains "from" "facebookmail.com") {
+    fileinto "Facebook";
+}
+if allof (address :contains "from" "banggood.com") {
+    fileinto "Banggood.com";
+}
+if anyof (address :contains "from" "temuemail.com", address :contains "from" "temu.com") {
+    fileinto "Temu";
+}
+if anyof (address :contains "from" "xing.com") {
+    fileinto "Xing";
+}
+if allof (address :contains "from" "info@m.bodylab24.de") {
+    fileinto "Werbung";
+}
+if allof (address :contains "from" "news.outlet46.de") {
+    fileinto "Werbung";
+}
+if allof (address :contains "from" "comms.mandmdirect.com") {
+    fileinto "Werbung";
+}
+if allof (address :contains "from" "mail.otto.de") {
+    fileinto "Werbung";
+}
+if allof (address :contains "from" "nl.urlaubsguru.de") {
+    fileinto "Werbung";
+}
+if allof (address :contains "from" "email.eyesandmore.com") {
+    fileinto "Werbung";
+}
+if allof (address :contains "from" "newsletter@apolux.de") {
+    fileinto "Werbung";
+}
+if allof (address :contains "from" "info.shop-apotheke.com") {
+    fileinto "Werbung";
+}
+if allof (address :contains "from" "info@guenther.de") {
+    fileinto "Werbung";
+}
+if allof (address :contains "from" "anja.weber@pearl.de") {
+    fileinto "Werbung";
+}
+if allof (address :contains "from" "info@mail.lidl.de") {
+    fileinto "Werbung";
+}
+if allof (address :contains "from" "info@mc.flyeralarm.com") {
+    fileinto "Werbung";
+}
+if allof (address :contains "from" "newsletter@angebote.aldi-sued.de") {
+    fileinto "Werbung";
+}
+if allof (address :contains "from" "kontakt@quovadis.net") {
+    fileinto "Werbung";
+}
+if allof (address :contains "from" "news.docmorris.de") {
+    fileinto "Werbung";
+}
