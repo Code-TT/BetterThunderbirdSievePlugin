@@ -16,6 +16,7 @@ const port = Number(process.argv[2] || 9420);
 http
   .createServer((req, res) => {
     if (req.method === "GET" && req.url.split("?")[0] === "/api/sieve/scripts") {
+      console.log(new Date().toISOString(), "GET /api/sieve/scripts");
       res.writeHead(200, { "content-type": "application/json" });
       res.end(JSON.stringify(dump));
       return;
