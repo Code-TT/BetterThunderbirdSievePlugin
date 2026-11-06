@@ -1,0 +1,416 @@
+{
+  "scripts": {
+    "sogo": "require [\"fileinto\"];\nif allof (address :contains \"from\" \"aliexpress.com\") {\n    fileinto \"AliExpress\";\n}\nif allof (address :contains \"from\" \"dhgate.com\") {\n    fileinto \"DHgate\";\n}\nif anyof (address :contains \"from\" \"facebook.com\", address :contains \"from\" \"facebookmail.com\") {\n    fileinto \"Facebook\";\n}\nif allof (address :contains \"from\" \"banggood.com\") {\n    fileinto \"Banggood.com\";\n}\nif anyof (address :contains \"from\" \"temuemail.com\", address :contains \"from\" \"temu.com\") {\n    fileinto \"Temu\";\n}\nif anyof (address :contains \"from\" \"xing.com\") {\n    fileinto \"Xing\";\n}\nif allof (address :contains \"from\" \"info@m.bodylab24.de\") {\n    fileinto \"Werbung\";\n}\nif allof (address :contains \"from\" \"news.outlet46.de\") {\n    fileinto \"Werbung\";\n}\nif allof (address :contains \"from\" \"comms.mandmdirect.com\") {\n    fileinto \"Werbung\";\n}\nif allof (address :contains \"from\" \"mail.otto.de\") {\n    fileinto \"Werbung\";\n}\nif allof (address :contains \"from\" \"nl.urlaubsguru.de\") {\n    fileinto \"Werbung\";\n}\nif allof (address :contains \"from\" \"email.eyesandmore.com\") {\n    fileinto \"Werbung\";\n}\nif allof (address :contains \"from\" \"newsletter@apolux.de\") {\n    fileinto \"Werbung\";\n}\nif allof (address :contains \"from\" \"info.shop-apotheke.com\") {\n    fileinto \"Werbung\";\n}\nif allof (address :contains \"from\" \"info@guenther.de\") {\n    fileinto \"Werbung\";\n}\nif allof (address :contains \"from\" \"anja.weber@pearl.de\") {\n    fileinto \"Werbung\";\n}\nif allof (address :contains \"from\" \"info@mail.lidl.de\") {\n    fileinto \"Werbung\";\n}\nif allof (address :contains \"from\" \"info@mc.flyeralarm.com\") {\n    fileinto \"Werbung\";\n}\nif allof (address :contains \"from\" \"newsletter@angebote.aldi-sued.de\") {\n    fileinto \"Werbung\";\n}\nif allof (address :contains \"from\" \"kontakt@quovadis.net\") {\n    fileinto \"Werbung\";\n}\nif allof (address :contains \"from\" \"news.docmorris.de\") {\n    fileinto \"Werbung\";\n}\n"
+  },
+  "rules": [
+    {
+      "id": "sogo:1",
+      "scriptName": "sogo",
+      "name": "aliexpress.com",
+      "summary": "from contains → fileinto AliExpress",
+      "active": true,
+      "combinator": "allof",
+      "conditions": [
+        {
+          "field": "from",
+          "op": "contains",
+          "value": "aliexpress.com"
+        }
+      ],
+      "action": {
+        "type": "fileinto",
+        "target": "AliExpress"
+      }
+    },
+    {
+      "id": "sogo:2",
+      "scriptName": "sogo",
+      "name": "dhgate.com",
+      "summary": "from contains → fileinto DHgate",
+      "active": true,
+      "combinator": "allof",
+      "conditions": [
+        {
+          "field": "from",
+          "op": "contains",
+          "value": "dhgate.com"
+        }
+      ],
+      "action": {
+        "type": "fileinto",
+        "target": "DHgate"
+      }
+    },
+    {
+      "id": "sogo:3",
+      "scriptName": "sogo",
+      "name": "facebook.com (+1)",
+      "summary": "from contains → fileinto Facebook",
+      "active": true,
+      "combinator": "anyof",
+      "conditions": [
+        {
+          "field": "from",
+          "op": "contains",
+          "value": "facebook.com"
+        },
+        {
+          "field": "from",
+          "op": "contains",
+          "value": "facebookmail.com"
+        }
+      ],
+      "action": {
+        "type": "fileinto",
+        "target": "Facebook"
+      }
+    },
+    {
+      "id": "sogo:4",
+      "scriptName": "sogo",
+      "name": "banggood.com",
+      "summary": "from contains → fileinto Banggood.com",
+      "active": true,
+      "combinator": "allof",
+      "conditions": [
+        {
+          "field": "from",
+          "op": "contains",
+          "value": "banggood.com"
+        }
+      ],
+      "action": {
+        "type": "fileinto",
+        "target": "Banggood.com"
+      }
+    },
+    {
+      "id": "sogo:5",
+      "scriptName": "sogo",
+      "name": "temuemail.com (+1)",
+      "summary": "from contains → fileinto Temu",
+      "active": true,
+      "combinator": "anyof",
+      "conditions": [
+        {
+          "field": "from",
+          "op": "contains",
+          "value": "temuemail.com"
+        },
+        {
+          "field": "from",
+          "op": "contains",
+          "value": "temu.com"
+        }
+      ],
+      "action": {
+        "type": "fileinto",
+        "target": "Temu"
+      }
+    },
+    {
+      "id": "sogo:6",
+      "scriptName": "sogo",
+      "name": "xing.com",
+      "summary": "from contains → fileinto Xing",
+      "active": true,
+      "combinator": "anyof",
+      "conditions": [
+        {
+          "field": "from",
+          "op": "contains",
+          "value": "xing.com"
+        }
+      ],
+      "action": {
+        "type": "fileinto",
+        "target": "Xing"
+      }
+    },
+    {
+      "id": "sogo:7",
+      "scriptName": "sogo",
+      "name": "info@m.bodylab24.de",
+      "summary": "from contains → fileinto Werbung",
+      "active": true,
+      "combinator": "allof",
+      "conditions": [
+        {
+          "field": "from",
+          "op": "contains",
+          "value": "info@m.bodylab24.de"
+        }
+      ],
+      "action": {
+        "type": "fileinto",
+        "target": "Werbung"
+      }
+    },
+    {
+      "id": "sogo:8",
+      "scriptName": "sogo",
+      "name": "news.outlet46.de",
+      "summary": "from contains → fileinto Werbung",
+      "active": true,
+      "combinator": "allof",
+      "conditions": [
+        {
+          "field": "from",
+          "op": "contains",
+          "value": "news.outlet46.de"
+        }
+      ],
+      "action": {
+        "type": "fileinto",
+        "target": "Werbung"
+      }
+    },
+    {
+      "id": "sogo:9",
+      "scriptName": "sogo",
+      "name": "comms.mandmdirect.com",
+      "summary": "from contains → fileinto Werbung",
+      "active": true,
+      "combinator": "allof",
+      "conditions": [
+        {
+          "field": "from",
+          "op": "contains",
+          "value": "comms.mandmdirect.com"
+        }
+      ],
+      "action": {
+        "type": "fileinto",
+        "target": "Werbung"
+      }
+    },
+    {
+      "id": "sogo:10",
+      "scriptName": "sogo",
+      "name": "mail.otto.de",
+      "summary": "from contains → fileinto Werbung",
+      "active": true,
+      "combinator": "allof",
+      "conditions": [
+        {
+          "field": "from",
+          "op": "contains",
+          "value": "mail.otto.de"
+        }
+      ],
+      "action": {
+        "type": "fileinto",
+        "target": "Werbung"
+      }
+    },
+    {
+      "id": "sogo:11",
+      "scriptName": "sogo",
+      "name": "nl.urlaubsguru.de",
+      "summary": "from contains → fileinto Werbung",
+      "active": true,
+      "combinator": "allof",
+      "conditions": [
+        {
+          "field": "from",
+          "op": "contains",
+          "value": "nl.urlaubsguru.de"
+        }
+      ],
+      "action": {
+        "type": "fileinto",
+        "target": "Werbung"
+      }
+    },
+    {
+      "id": "sogo:12",
+      "scriptName": "sogo",
+      "name": "email.eyesandmore.com",
+      "summary": "from contains → fileinto Werbung",
+      "active": true,
+      "combinator": "allof",
+      "conditions": [
+        {
+          "field": "from",
+          "op": "contains",
+          "value": "email.eyesandmore.com"
+        }
+      ],
+      "action": {
+        "type": "fileinto",
+        "target": "Werbung"
+      }
+    },
+    {
+      "id": "sogo:13",
+      "scriptName": "sogo",
+      "name": "newsletter@apolux.de",
+      "summary": "from contains → fileinto Werbung",
+      "active": true,
+      "combinator": "allof",
+      "conditions": [
+        {
+          "field": "from",
+          "op": "contains",
+          "value": "newsletter@apolux.de"
+        }
+      ],
+      "action": {
+        "type": "fileinto",
+        "target": "Werbung"
+      }
+    },
+    {
+      "id": "sogo:14",
+      "scriptName": "sogo",
+      "name": "info.shop-apotheke.com",
+      "summary": "from contains → fileinto Werbung",
+      "active": true,
+      "combinator": "allof",
+      "conditions": [
+        {
+          "field": "from",
+          "op": "contains",
+          "value": "info.shop-apotheke.com"
+        }
+      ],
+      "action": {
+        "type": "fileinto",
+        "target": "Werbung"
+      }
+    },
+    {
+      "id": "sogo:15",
+      "scriptName": "sogo",
+      "name": "info@guenther.de",
+      "summary": "from contains → fileinto Werbung",
+      "active": true,
+      "combinator": "allof",
+      "conditions": [
+        {
+          "field": "from",
+          "op": "contains",
+          "value": "info@guenther.de"
+        }
+      ],
+      "action": {
+        "type": "fileinto",
+        "target": "Werbung"
+      }
+    },
+    {
+      "id": "sogo:16",
+      "scriptName": "sogo",
+      "name": "anja.weber@pearl.de",
+      "summary": "from contains → fileinto Werbung",
+      "active": true,
+      "combinator": "allof",
+      "conditions": [
+        {
+          "field": "from",
+          "op": "contains",
+          "value": "anja.weber@pearl.de"
+        }
+      ],
+      "action": {
+        "type": "fileinto",
+        "target": "Werbung"
+      }
+    },
+    {
+      "id": "sogo:17",
+      "scriptName": "sogo",
+      "name": "info@mail.lidl.de",
+      "summary": "from contains → fileinto Werbung",
+      "active": true,
+      "combinator": "allof",
+      "conditions": [
+        {
+          "field": "from",
+          "op": "contains",
+          "value": "info@mail.lidl.de"
+        }
+      ],
+      "action": {
+        "type": "fileinto",
+        "target": "Werbung"
+      }
+    },
+    {
+      "id": "sogo:18",
+      "scriptName": "sogo",
+      "name": "info@mc.flyeralarm.com",
+      "summary": "from contains → fileinto Werbung",
+      "active": true,
+      "combinator": "allof",
+      "conditions": [
+        {
+          "field": "from",
+          "op": "contains",
+          "value": "info@mc.flyeralarm.com"
+        }
+      ],
+      "action": {
+        "type": "fileinto",
+        "target": "Werbung"
+      }
+    },
+    {
+      "id": "sogo:19",
+      "scriptName": "sogo",
+      "name": "newsletter@angebote.aldi-sued.de",
+      "summary": "from contains → fileinto Werbung",
+      "active": true,
+      "combinator": "allof",
+      "conditions": [
+        {
+          "field": "from",
+          "op": "contains",
+          "value": "newsletter@angebote.aldi-sued.de"
+        }
+      ],
+      "action": {
+        "type": "fileinto",
+        "target": "Werbung"
+      }
+    },
+    {
+      "id": "sogo:20",
+      "scriptName": "sogo",
+      "name": "kontakt@quovadis.net",
+      "summary": "from contains → fileinto Werbung",
+      "active": true,
+      "combinator": "allof",
+      "conditions": [
+        {
+          "field": "from",
+          "op": "contains",
+          "value": "kontakt@quovadis.net"
+        }
+      ],
+      "action": {
+        "type": "fileinto",
+        "target": "Werbung"
+      }
+    },
+    {
+      "id": "sogo:21",
+      "scriptName": "sogo",
+      "name": "news.docmorris.de",
+      "summary": "from contains → fileinto Werbung",
+      "active": true,
+      "combinator": "allof",
+      "conditions": [
+        {
+          "field": "from",
+          "op": "contains",
+          "value": "news.docmorris.de"
+        }
+      ],
+      "action": {
+        "type": "fileinto",
+        "target": "Werbung"
+      }
+    }
+  ]
+}

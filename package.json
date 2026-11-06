@@ -1,0 +1,16 @@
+{
+  "package": true,
+  "name": "better-thunderbird-sieve-plugin",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sieve-Mail-Filterung für Thunderbird/Betterbird — PoC Phase 1",
+  "type": "module",
+  "scripts": {
+    "build": "node tools/build_xpi.mjs",
+    "proxy-stub": "node tools/proxy-stub.mjs",
+    "test": "playwright test --config tests/playwright.config.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.65.0"
+  }
+}

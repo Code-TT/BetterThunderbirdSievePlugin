@@ -1,0 +1,45 @@
+[
+  {
+    "namespace": "sieveView",
+    "types": [
+      {
+        "id": "SieveRow",
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "summary": { "type": "string" },
+          "active": { "type": "boolean" },
+          "source": { "type": "string", "optional": true }
+        }
+      }
+    ],
+    "functions": [
+      {
+        "name": "injectRows",
+        "type": "function",
+        "async": true,
+        "parameters": [
+          {
+            "name": "rows",
+            "type": "array",
+            "items": { "$ref": "SieveRow" }
+          },
+          {
+            "name": "mode",
+            "type": "string",
+            "description": "one of: all | local | sieve"
+          }
+        ]
+      },
+      {
+        "name": "openViewer",
+        "type": "function",
+        "async": true,
+        "parameters": [
+          { "name": "ruleId", "type": "string" }
+        ]
+      }
+    ]
+  }
+]
