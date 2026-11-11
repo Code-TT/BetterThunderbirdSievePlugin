@@ -41,6 +41,52 @@ Thunderbird/Betterbird                    Mailserver (Dovecot)
 - GitHub: `BetterThunderbirdSievePlugin` (public)
 - Dieses Verzeichnis = Repo-Root; `proxy/` (Go), `addon/` (WebExtension), `tests/` (Playwright)
 
+## Installation
+
+### 1. Proxy herunterladen
+
+Die Plattform-Binaries (Windows/Linux/macOS) werden von [GitHub Actions Cross-Compile](https://github.com/Code-TT/BetterThunderbirdSievePlugin/blob/main/.github/workflows/proxy-release.yml)
+gebaut und als Artefakte im
+[Release 0.1.0](https://github.com/Code-TT/BetterThunderbirdSievePlugin/releases/tag/sieveproxy-v0.1.0)
+veröffentlicht:
+
+```
+sieveproxy-darwin-arm64      sieveproxy-windows-amd64.exe
+sieveproxy-darwin-amd64      sieveproxy-linux-amd64
+                             sieveproxy-linux-arm64
+```
+
+**macOS:** Der Binary ist unsigniert — beim ersten Start via Rechtsklick → Öffnen einmal erlauben,
+oder `xattr -c sieveproxy-*` setzen.
+**Windows:** SmartScreen-Warnung erscheint bei eigener Signierung; „Weitere Informationen" → Ausführen.
+
+Der Proxy startet ein Systray-Icon und lauscht auf localhost-HTTP für das Add-on. Autostart wird vom
+Add-on eingerichtet (Phase-4-Funktion).
+
+### 2. Sieve-Konfiguration
+
+Zielserver: `mail.trellix.de`, ManageSieve auf Port **4190**, TLS aktiviert.
+
+Die Zugangsdaten werden vom Add-on in der Desktop-Homedatei `.trella-mail` gelesen bzw. verwaltet:
+der Proxy braucht sie nicht aus dem Repo zu wissen, das Passwort wird nur hier lokal abgelegt und
+niemals ins Repository übergeben, geloggt oder committed (siehe
+[docs/notizen-managesieve.md](docs/notizen-managesieve.md)):
+
+> ⚠️ **Niemals Credentials im Code / in Commits speichern!**
+
+### 3. Add-on in Betterbird installieren
+
+Das Add-on (`.xpi`) wird von `npm run build` lokal gebaut (tools/build_xpi.mjs → dist/sieve-filter-view-<version>.xpi).
+Für die Entwicklung wird es in Betterbird als temporäres Add-on geladen:
+
+```
+Betterbird → Add-ons → Zahnrad → "Add-on aus Datei installieren" → sieve-filter-view-0.2.0.xpi
+```
+
+Die Signierung/XPInstall in Betterbird: `xpinstall.signatures.required` muss in
+`about:config` auf **false** gesetzt sein (Standard bei Betterbird-Builds), damit die
+XPI-Datei (nicht aus dem Add-on-Store) installiert werden kann.
+
 ## Status
 
 Siehe `docs/PROJEKT.md` (Plan, Phasen) und `AGENTS.md` (Arbeitsregeln & Freigaben).
