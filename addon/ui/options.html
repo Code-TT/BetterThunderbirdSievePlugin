@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!-- Add-on-Einstellungen (Phase 4): Konto-Auswahl, Proxy-URL, Verbindungstest.
+     TB-Fensterstil, gleiche Palette wie Editor/Viewer. -->
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <title>Sieve Filter View – Einstellungen</title>
+  <link rel="stylesheet" href="options.css" />
+</head>
+<body>
+  <header id="options-header">
+    <span class="sieve-icon" title="Sieve Filter View"></span>
+    <h1>Einstellungen – Sieve Filter View</h1>
+  </header>
+
+  <section id="settings-form">
+    <div class="field">
+      <label for="account-select">Mail-Konto</label>
+      <select id="account-select">
+        <option value="thomas@trella.de">thomas@trella.de</option>
+        <option value="admin@trellix.de">admin@trellix.de</option>
+        <option value="__custom__">Benutzerdefiniert…</option>
+      </select>
+      <input type="text" id="account-custom" placeholder="Konto-Adresse eingeben…" hidden
+             aria-label="Benutzerdefinierte Konto-Adresse" />
+      <p class="hint">Konto, dessen Sieve-Regeln angezeigt werden.</p>
+    </div>
+
+    <div class="field">
+      <label for="proxy-url">Sieve-Proxy-Adresse</label>
+      <input type="url" id="proxy-url" placeholder="http://127.0.0.1:9421" />
+      <p class="hint">Adresse des lokalen Sieve-Proxys. Standard: <code>http://127.0.0.1:9421</code>.
+        Start: Systray-Symbol „Sieve-Proxy“ bzw. <code>proxy/dist/sieveproxy</code>.</p>
+    </div>
+
+    <div class="buttons">
+      <button id="btn-test" type="button">Verbindung testen</button>
+      <button id="btn-save" type="button" class="primary">Speichern</button>
+    </div>
+
+    <p id="test-result" role="status"></p>
+    <p id="save-status" role="status"></p>
+  </section>
+
+  <script type="module" src="options.js"></script>
+</body>
+</html>

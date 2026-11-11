@@ -60,12 +60,31 @@ function showError(msg) {
   box.hidden = false;
 }
 
+function showConnectionHint(id) {
+  showError(`Regel "${id}" nicht gefunden oder Server-Regeln nicht erreichbar.`);
+  const hint = document.getElementById("connection-hint");
+  if (hint) hint.hidden = false;
+}
+
 async function init() {
   const id = new URLSearchParams(location.search).get("rule");
   if (!id) return showError("Keine Regel-ID übergeben.");
   const result = await getRule(id);
-  if (!result || !result.rule) return showError(`Regel "${id}" nicht gefunden.`);
+  if (!result || !result.rule) return showConnectionHint(id);
   render(result.rule, result.script);
 }
 
 init();
+
+const openSettingsBtn = document.getElementById("btn-open-settings");
+if (openSettingsBtn) {
+  openSettingsBtn.addEventListener("click", async () => {
+    try {
+      if (typeof browser !== "undefined" && browser?.runtime?.openOptionsPage) {
+        await browser.runtime.openOptionsPage();
+      }
+    } catch (e) {
+      console.error("openOptionsPage failed", e);
+    }
+  });
+}

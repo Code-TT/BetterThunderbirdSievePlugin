@@ -37,6 +37,13 @@
 
   <footer id="viewer-footer">
     <span id="error-message" hidden></span>
+    <div id="connection-hint" hidden>
+      <strong>Server-Regeln nicht erreichbar.</strong>
+      <p class="muted">Die Regeln kommen über den lokalen Sieve-Proxy (Standard
+        <code>http://127.0.0.1:9421</code>). Start: Systray-Symbol „Sieve-Proxy“ aktivieren bzw.
+        <code>proxy/dist/sieveproxy</code> starten; Adresse in den Einstellungen prüfen.</p>
+      <button id="btn-open-settings" type="button">Einstellungen öffnen</button>
+    </div>
   </footer>
 
   <script src="viewer.js"></script>

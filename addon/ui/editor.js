@@ -3,15 +3,18 @@
 "use strict";
 
 import { parseSieve, serializeSieve, extractRules, SieveSyntaxError } from "../lib/sieve/parser.mjs";
-import { SieveClient, SieveConflictError } from "../lib/sieve/client.mjs";
+import { SieveClient, SieveConflictError, SieveConnectionError } from "../lib/sieve/client.mjs";
+import { loadSettings } from "../lib/sieve/settings.mjs";
 
 const $ = (id) => document.getElementById(id);
 
-function clientFromEnv() {
+/* Client wird aus den Add-on-Settings gebaut (Proxy-URL, Phase 4) statt fixem baseUrl. */
+async function makeClient() {
+  const settings = await loadSettings();
   if (window.__TEST_DATA__ && window.__TEST_DATA__.fakeFetch) {
-    return new SieveClient({ baseUrl: "http://bridge.test", fetchImpl: window.__TEST_DATA__.fakeFetch });
+    return new SieveClient({ baseUrl: settings.proxyUrl || "http://bridge.test", fetchImpl: window.__TEST_DATA__.fakeFetch });
   }
-  return new SieveClient({ baseUrl: window.__BRIDGE_URL__ || "http://127.0.0.1:9421" });
+  return new SieveClient({ baseUrl: settings.proxyUrl });
 }
 
 const state = {
@@ -19,7 +22,38 @@ const state = {
   fingerprint: null,
   active: false,
   saving: false,
+  client: null,
 };
+
+/* ------------------------------------------------- Verbindungs-Fallback --- */
+
+function showConnectionError(e) {
+  const box = $("connection-box");
+  if (!box) return;
+  $("connection-detail").textContent = e.message;
+  box.hidden = false;
+}
+
+function hideConnectionError() {
+  const box = $("connection-box");
+  if (box) box.hidden = true;
+}
+
+async function openSettings() {
+  try {
+    if (typeof browser !== "undefined" && browser?.runtime?.openOptionsPage) {
+      await browser.runtime.openOptionsPage();
+    } else {
+      setStatus("Einstellungen: Add-on-Manager → Sieve Filter View → Einstellungen.", "saved");
+    }
+  } catch (e) {
+    setStatus(`Einstellungen konnten nicht geöffnet werden: ${e.message}`, "error");
+  }
+}
+
+function connectionHint() {
+  return "Proxy nicht erreichbar — Systray-Symbol prüfen oder proxy/dist/sieveproxy starten, Proxy-Adresse in den Einstellungen kontrollieren.";
+}
 
 /* ------------------------------------------------------------ Rendering --- */
 
@@ -98,7 +132,7 @@ function validate() {
 /* ---------------------------------------------------------------- Laden --- */
 
 export async function loadScript(name) {
-  const client = clientFromEnv();
+  const client = state.client || (state.client = await makeClient());
   try {
     let data;
     if (window.__TEST_DATA__ && window.__TEST_DATA__.script) {
@@ -106,6 +140,7 @@ export async function loadScript(name) {
     } else {
       data = await client.getScript(name);
     }
+    hideConnectionError();
     state.scriptName = data.name;
     state.fingerprint = data.fingerprint;
     state.active = !!data.active;
@@ -117,7 +152,12 @@ export async function loadScript(name) {
     $("connection-source").textContent =
       window.__TEST_DATA__ ? "Testdaten" : `Proxy ${client.baseUrl.replace(/^https?:\/\//, "")}`;
   } catch (e) {
-    setStatus(`Laden fehlgeschlagen: ${e.message}`, "error");
+    if (e instanceof SieveConnectionError) {
+      showConnectionError(e);
+      setStatus("Laden fehlgeschlagen: Proxy nicht erreichbar.", "error");
+    } else {
+      setStatus(`Laden fehlgeschlagen: ${e.message}`, "error");
+    }
   }
 }
 
@@ -127,7 +167,7 @@ export async function saveScript() {
   if (!validate() || state.saving) return;
   state.saving = true;
   $("btn-save").disabled = true;
-  const client = clientFromEnv();
+  const client = state.client || (state.client = await makeClient());
   const text = $("script-text").value;
   try {
     const ifUnchanged = $("force-overwrite").checked ? undefined : state.fingerprint;
@@ -143,7 +183,7 @@ export async function saveScript() {
       $("conflict-box").hidden = false;
       setStatus("Konflikt — nichts überschrieben. Erst prüfen, dann entscheiden.", "error");
     } else {
-      setStatus(`Speichern fehlgeschlagen: ${e.message}`, "error");
+      setStatus(`Speichern fehlgeschlagen: ${e instanceof SieveConnectionError ? connectionHint() : e.message}`, "error");
     }
   } finally {
     state.saving = false;
@@ -154,14 +194,14 @@ export async function saveScript() {
 /* -------------------------------------------------------------- Aktionen -- */
 
 async function activateScript() {
-  const client = clientFromEnv();
+  const client = state.client || (state.client = await makeClient());
   try {
     await client.setActive(state.scriptName);
     state.active = true;
     setBadge(true);
     setStatus(`${state.scriptName} aktiviert`, "saved");
   } catch (e) {
-    setStatus(`Aktivieren fehlgeschlagen: ${e.message}`, "error");
+    setStatus(`Aktivieren fehlgeschlagen: ${e instanceof SieveConnectionError ? connectionHint() : e.message}`, "error");
   }
 }
 
@@ -189,14 +229,14 @@ async function onDeleteButton() {
 
 async function onConfirmDelete() {
   $("confirm-dialog").close();
-  const client = clientFromEnv();
+  const client = state.client || (state.client = await makeClient());
   try {
     await client.deleteScript(state.scriptName, { confirm: true, fingerprint: state.fingerprint });
     setStatus(`${state.scriptName} gelöscht`, "saved");
     $("script-text").value = "";
     validate();
   } catch (e) {
-    setStatus(`Löschen fehlgeschlagen: ${e.message}`, "error");
+    setStatus(`Löschen fehlgeschlagen: ${e instanceof SieveConnectionError ? connectionHint() : e.message}`, "error");
   }
 }
 
@@ -210,6 +250,8 @@ export function init() {
   $("confirm-delete").addEventListener("click", onConfirmDelete);
   $("confirm-cancel").addEventListener("click", () => $("confirm-dialog").close());
   $("btn-reload").addEventListener("click", () => state.scriptName && loadScript(state.scriptName));
+  const openBtn = $("btn-open-settings");
+  if (openBtn) openBtn.addEventListener("click", openSettings);
 
   const name = new URLSearchParams(location.search).get("script") || "sogo";
   loadScript(name);
