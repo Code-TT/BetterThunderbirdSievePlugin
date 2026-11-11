@@ -1,0 +1,118 @@
+/* TB-Fensterstil: an Thunderbird/Betterbird angelehnte Palette, System-Fonts. */
+:root {
+  --bg: #ffffff;
+  --bg-alt: #f0f2f5;
+  --border: #d3d3d3;
+  --text: #18181b;
+  --muted: #5f5f68;
+  --accent: #0060df;
+  --ok: #1a7f37;
+  --off: #8b8b93;
+  font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  padding: 16px 20px 24px;
+}
+
+#viewer-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
+}
+
+#rule-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+  background: var(--accent);
+  mask: none;
+}
+
+h1 { font-size: 16px; font-weight: 600; margin: 0 8px 0 0; }
+
+.badge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: var(--bg-alt);
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+.badge.active { color: var(--ok); border-color: var(--ok); }
+.badge.inactive { color: var(--off); }
+.badge.source { color: var(--accent); border-color: var(--accent); }
+
+.readonly-note {
+  margin-inline-start: auto;
+  font-size: 11px;
+  color: var(--off);
+  border: 1px dashed var(--border);
+  border-radius: 4px;
+  padding: 2px 8px;
+}
+
+#rule-detail { margin-top: 14px; }
+
+table#conditions {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 4px;
+}
+table#conditions caption {
+  text-align: left;
+  font-weight: 600;
+  padding-bottom: 4px;
+}
+table#conditions th, table#conditions td {
+  border: 1px solid var(--border);
+  padding: 4px 8px;
+  text-align: left;
+}
+table#conditions th { background: var(--bg-alt); }
+table#conditions[data-combinator] caption::after {
+  content: " (Verknüpfung: " attr(data-combinator) ")";
+  font-weight: 400;
+  color: var(--muted);
+}
+
+#actions h2, #raw-script h2 {
+  font-size: 13px;
+  margin: 16px 0 4px;
+}
+
+#action-summary {
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 10px;
+  display: inline-block;
+}
+
+#script-text {
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 10px;
+  overflow: auto;
+  max-height: 220px;
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 12px;
+  white-space: pre-wrap;
+}
+
+#error-message {
+  color: #c0281f;
+  background: #fdecea;
+  border: 1px solid #c0281f;
+  border-radius: 4px;
+  padding: 8px 12px;
+}

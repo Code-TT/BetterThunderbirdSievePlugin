@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<!-- Read-only Sieve-Viewer (eigenes HTML → Playwright-testbar), TB-Fensterstil. -->
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <title>Sieve-Regel (read-only)</title>
+  <link rel="stylesheet" href="viewer.css" />
+</head>
+<body>
+  <header id="viewer-header">
+    <span id="rule-icon" class="sieve-icon" title="Serverregel (Sieve)"></span>
+    <h1 id="rule-name">—</h1>
+    <span id="rule-active" class="badge active">aktiv</span>
+    <span id="rule-source" class="badge source">Server (Sieve)</span>
+    <span class="readonly-note" title="Diese Ansicht ist read-only">nur Lesen</span>
+  </header>
+
+  <section id="rule-detail">
+    <table id="conditions">
+      <caption>Bedingungen</caption>
+      <thead>
+        <tr><th scope="col">Feld</th><th scope="col">Operator</th><th scope="col">Wert</th></tr>
+      </thead>
+      <tbody><!-- via JS --></tbody>
+    </table>
+
+    <div id="actions">
+      <h2>Aktion</h2>
+      <p id="action-summary">—</p>
+    </div>
+
+    <div id="raw-script">
+      <h2>Skript-Auszug</h2>
+      <pre id="script-text"></pre>
+    </div>
+  </section>
+
+  <footer id="viewer-footer">
+    <span id="error-message" hidden></span>
+  </footer>
+
+  <script src="viewer.js"></script>
+</body>
+</html>

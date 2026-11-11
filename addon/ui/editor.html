@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<!-- Sieve-Editor (eigenes HTML-Popup, TB-Fensterstil → Playwright-testbar).
+     Vorbefüllung aus dem Parser, Validierung vor Write-Back, Konflikt-Hinweis bei 409. -->
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <title>Sieve-Skript bearbeiten</title>
+  <link rel="stylesheet" href="editor.css" />
+</head>
+<body>
+  <header id="editor-header">
+    <span id="sieve-icon" class="sieve-icon" title="Serverregel (Sieve)"></span>
+    <h1 id="script-name">—</h1>
+    <span id="script-active" class="badge inactive">inaktiv</span>
+    <span id="connection-source" class="badge source">Testdaten</span>
+  </header>
+
+  <section id="parsed-summary">
+    <h2>Erkannte Regeln (Parser)</h2>
+    <ol id="rule-list"><!-- via JS: Regeln mit Bedingungen und Aktionen --></ol>
+    <p id="parse-error" class="parse-error" hidden></p>
+  </section>
+
+  <section id="editor-section">
+    <h2>Skript</h2>
+    <textarea id="script-text" rows="16" spellcheck="false" aria-label="Sieve-Skript"></textarea>
+    <p id="validation" aria-live="polite">—</p>
+  </section>
+
+  <footer id="editor-footer">
+    <span id="status" role="status"></span>
+    <div id="conflict-box" hidden>
+      <strong>Konflikt:</strong> <span id="conflict-detail"></span>
+      <label><input type="checkbox" id="force-overwrite" /> Trotzdem überschreiben (Serverstand geht verloren)</label>
+    </div>
+    <div class="buttons">
+      <button id="btn-reload" type="button">Neu laden</button>
+      <button id="btn-activate" type="button">Aktivieren</button>
+      <button id="btn-delete" type="button" class="danger">Löschen…</button>
+      <button id="btn-save" type="button" class="primary" disabled>Speichern</button>
+    </div>
+  </footer>
+
+  <dialog id="confirm-dialog">
+    <p>Skript <strong id="confirm-name"></strong> wirklich löschen?</p>
+    <p class="muted">Dies kann nicht rückgängig gemacht werden.</p>
+    <div class="buttons">
+      <button id="confirm-cancel" type="button">Abbrechen</button>
+      <button id="confirm-delete" type="button" class="danger">Endgültig löschen</button>
+    </div>
+  </dialog>
+
+  <script type="module" src="editor.js"></script>
+</body>
+</html>

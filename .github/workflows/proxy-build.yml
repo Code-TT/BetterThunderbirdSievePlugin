@@ -1,0 +1,68 @@
+name: proxy-build
+
+on:
+  push:
+    branches: ["**"]
+    paths: ["proxy/**", ".github/workflows/proxy-build.yml"]
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: build ${{ matrix.goos }}/${{ matrix.goarch }}${{ matrix.tray && ' + tray' || '' }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # macOS (Systray via cgo → macos-Runner, natives Build)
+          - { goos: darwin, goarch: arm64, runner: macos-latest, tray: true,  ext: ""    }
+          - { goos: darwin, goarch: amd64, runner: macos-latest, tray: true,  ext: ""    }
+          # Windows (Systray pure Go → Cross-Compile)
+          - { goos: windows, goarch: amd64, runner: ubuntu-latest, tray: true, ext: ".exe" }
+          # Linux headless (Systray bräuchte GTK/cgo → bewusst ohne)
+          - { goos: linux, goarch: amd64, runner: ubuntu-latest, tray: false, ext: ""    }
+          - { goos: linux, goarch: arm64, runner: ubuntu-latest, tray: false, ext: ""    }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "stable"
+          cache-dependency-path: proxy/go.sum
+      - name: Build
+        working-directory: proxy
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          # darwin/amd64 wird vom arm64-Runner gebaut: cgo (Systray) braucht
+          # explizites CGO_ENABLED=1 plus -arch-Flags für x86_64.
+          CGO_ENABLED: ${{ matrix.goos == 'darwin' && matrix.goarch == 'amd64' && '1' || '' }}
+          CGO_CFLAGS: ${{ matrix.goos == 'darwin' && matrix.goarch == 'amd64' && '-arch x86_64' || '' }}
+          CGO_LDFLAGS: ${{ matrix.goos == 'darwin' && matrix.goarch == 'amd64' && '-arch x86_64' || '' }}
+          CC: ${{ matrix.goos == 'darwin' && matrix.goarch == 'amd64' && 'clang' || '' }}
+        run: |
+          TAGS=""
+          [ "${{ matrix.tray }}" = "true" ] && TAGS="-tags systray"
+          go build $TAGS -trimpath -o "dist/sieveproxy-${{ matrix.goos }}-${{ matrix.goarch }}${{ matrix.ext }}" .
+      - name: Smoke (nur natives Ziel)
+        if: matrix.goos == runner.os && matrix.goarch == runner.arch
+        working-directory: proxy
+        run: ./dist/sieveproxy-${{ matrix.goos }}-${{ matrix.goarch }} --help
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sieveproxy-${{ matrix.goos }}-${{ matrix.goarch }}${{ matrix.tray && '-tray' || '' }}
+          path: proxy/dist/
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/sieveproxy-v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+          path: dist
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
