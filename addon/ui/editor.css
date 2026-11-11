@@ -134,3 +134,13 @@ dialog {
 }
 dialog::backdrop { background: rgba(0, 0, 0, 0.3); }
 .muted { color: var(--muted); }
+
+#connection-box {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--danger);
+  border-radius: 6px;
+  background: #fdf2f1;
+}
+#connection-box .muted { margin: 6px 0; }
+#connection-box button { margin-top: 4px; }

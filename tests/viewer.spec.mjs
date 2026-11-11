@@ -84,5 +84,6 @@ test("Fehlerfall: unbekannte Regel zeigt verständliche Meldung", async ({ page 
 test("kein aktives Formular — Viewer bleibt read-only", async ({ page }) => {
   await openViewer(page, "sogo:1");
   await expect(page.locator("form, input:not([type=hidden]), textarea, select")).toHaveCount(0);
-  await expect(page.locator("button")).toHaveCount(0);
+  // versteckter Verbindungs-Hinweis-Button erlaubt, sichtbare Buttons bleiben 0
+  await expect(page.locator("button:visible")).toHaveCount(0);
 });

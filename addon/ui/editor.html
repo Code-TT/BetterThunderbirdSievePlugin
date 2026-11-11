@@ -33,6 +33,12 @@
       <strong>Konflikt:</strong> <span id="conflict-detail"></span>
       <label><input type="checkbox" id="force-overwrite" /> Trotzdem überschreiben (Serverstand geht verloren)</label>
     </div>
+    <div id="connection-box" hidden class="connection-box">
+      <strong>Verbindung fehlgeschlagen:</strong> <span id="connection-detail"></span>
+      <p class="muted">Server-Regeln kommen über den lokalen Sieve-Proxy. Start: Systray-Symbol „Sieve-Proxy“
+        aktivieren bzw. <code>proxy/dist/sieveproxy</code> starten. Danach „Neu laden“.</p>
+      <button id="btn-open-settings" type="button">Einstellungen öffnen</button>
+    </div>
     <div class="buttons">
       <button id="btn-reload" type="button">Neu laden</button>
       <button id="btn-activate" type="button">Aktivieren</button>

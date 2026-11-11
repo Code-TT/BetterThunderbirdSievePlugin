@@ -21,6 +21,15 @@ export class SieveConflictError extends Error {
   }
 }
 
+/** Netzwerkfehler (Proxy nicht erreichbar etc.) — klare Nutzerbotschaft statt rohem fetch-Fehler. */
+export class SieveConnectionError extends Error {
+  constructor(message, details) {
+    super(message);
+    this.name = "SieveConnectionError";
+    this.details = details || {};
+  }
+}
+
 export class SieveClient {
   /**
    * @param {object} opts
@@ -29,7 +38,17 @@ export class SieveClient {
    */
   constructor({ baseUrl = "http://127.0.0.1:9421", fetchImpl = globalThis.fetch } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
-    this._fetch = fetchImpl;
+    const raw = fetchImpl;
+    this._fetch = async (url, init) => {
+      try {
+        return await raw(url, init);
+      } catch (e) {
+        throw new SieveConnectionError(
+          `Sieve-Proxy unter ${this.baseUrl} nicht erreichbar. Läuft der Proxy?`,
+          { baseUrl: this.baseUrl, cause: String((e && e.message) || e) }
+        );
+      }
+    };
   }
 
   async listScripts() {
