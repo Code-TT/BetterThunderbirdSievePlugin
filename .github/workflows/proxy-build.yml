@@ -37,7 +37,8 @@ jobs:
           GOOS: ${{ matrix.goos }}
           GOARCH: ${{ matrix.goarch }}
           # darwin/amd64 wird vom arm64-Runner gebaut: cgo (Systray) braucht
-          # explizite -arch-Flags für x86_64.
+          # explizites CGO_ENABLED=1 plus -arch-Flags für x86_64.
+          CGO_ENABLED: ${{ matrix.goos == 'darwin' && matrix.goarch == 'amd64' && '1' || '' }}
           CGO_CFLAGS: ${{ matrix.goos == 'darwin' && matrix.goarch == 'amd64' && '-arch x86_64' || '' }}
           CGO_LDFLAGS: ${{ matrix.goos == 'darwin' && matrix.goarch == 'amd64' && '-arch x86_64' || '' }}
           CC: ${{ matrix.goos == 'darwin' && matrix.goarch == 'amd64' && 'clang' || '' }}
