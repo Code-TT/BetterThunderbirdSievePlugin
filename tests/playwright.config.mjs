@@ -9,8 +9,15 @@ export default defineConfig({
   timeout: 20_000,
   retries: 0,
   workers: 1,
+  /* ES-Module können nicht über file:// geladen werden (CORS) → kleiner Static-Server. */
+  webServer: {
+    command: "node tools/ui-server.mjs 9430",
+    port: 9430,
+    reuseExistingServer: true,
+    cwd: root,
+  },
   use: {
-    baseURL: `file://${path.join(root, "addon/ui")}`,
+    baseURL: `http://127.0.0.1:9430`,
     browserName: "chromium",
     viewport: { width: 800, height: 640 },
   },
