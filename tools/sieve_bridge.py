@@ -3,7 +3,8 @@
 
 Implementiert genau die Schnittstelle, die der Go-Proxy in Phase 3 1:1 übernimmt.
 Läuft NUR auf 127.0.0.1. Zugangsdaten werden zur Laufzeit aus der Desktop-Datei
-`.trella-mail` gelesen (positional: Zeile 3 = Login, Zeile 4 = Passwort) und nie
+`.trella-mail` gelesen (positional: Zeile 4 = Login, Zeile 5 = Passwort; 0-basiert
+Index 3/4 — Zeile 2 ist leer) und nie
 geloggt. Konflikt-Erkennung: Fingerprint (SHA-256 über Skripttext + Aktiv-Status);
 PUT/DELETE mit `if_unchanged` prüfen vor dem Write.
 
@@ -34,7 +35,7 @@ PORT = 4190
 
 def load_creds():
     lines = CRED_FILE.read_text(encoding="utf-8").splitlines()
-    return lines[2].strip(), lines[3].strip()
+    return lines[3].strip(), lines[4].strip()
 
 
 def connect():
